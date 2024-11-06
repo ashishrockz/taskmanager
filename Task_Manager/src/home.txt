@@ -1,0 +1,198 @@
+import {
+  Pressable,
+  StyleSheet,
+  Image,
+  TextInput,
+  View,
+  Text,
+  DrawerLayoutAndroid,
+  Button,
+  Switch,
+} from 'react-native';
+import React, {useState, useEffect, useRef} from 'react';
+import List from './Components/List';
+import DatePicker from 'react-native-date-picker';
+import {isEnabled} from 'react-native/Libraries/Performance/Systrace';
+
+const Home = () => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filter, setFilter] = useState('');
+  const [fromDate, setFromDate] = useState<Date>();
+  const [toDate, setToDate] = useState<Date | null>();
+  const [open, setOpen] = useState(false);
+  const drawerRef = useRef<DrawerLayoutAndroid>(null);
+  const [isEnabled, setIsEnabled] = useState(false);
+  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setFilter(searchTerm);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
+
+  const renderDrawerContent = () => (
+    <View style={styles.drawerContainer}>
+      <Text style={styles.drawerHeader}>Filters</Text>
+      <View style={styles.filters_container}>
+        <Text style={styles.heading}>Due Tasks:-</Text>
+        <View style={styles.date_container}>
+          <Text style={styles.heading}>From:-</Text>
+          <DatePicker
+            modal
+            open={open}
+            date={fromDate ? fromDate : new Date()}
+            mode="date"
+            onConfirm={date => {
+              setOpen(false);
+              setFromDate(date);
+            }}
+            onCancel={() => setOpen(false)}
+          />
+          <Text onPress={() => setOpen(true)} style={styles.input}>
+            {fromDate?.toLocaleDateString()}
+          </Text>
+        </View>
+        <View style={styles.date_container}>
+          <Text style={styles.heading}>To:-</Text>
+          <DatePicker
+            modal
+            open={open}
+            date={toDate ? toDate : new Date()}
+            mode="date"
+            onConfirm={date => {
+              setOpen(false);
+              setToDate(date);
+            }}
+            onCancel={() => setOpen(false)}
+          />
+          <Text onPress={() => setOpen(true)} style={styles.input}>
+            {toDate?.toLocaleDateString()}
+          </Text>
+        </View>
+        <View>
+          <Button
+            title="Done"
+            onPress={() => {
+              drawerRef.current?.closeDrawer();
+            }}
+          />
+        </View>
+        <Text style={styles.heading}>Task Status:-</Text>
+      </View>
+      <View  style={styles.toogle} >
+        <Text style={styles.heading}>Dark Theam</Text>
+        <Switch
+          trackColor={{false: '#767577', true: '#81b0ff'}}
+          thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
+          onValueChange={toggleSwitch}
+          value={isEnabled}
+        />
+      </View>
+    </View>
+  );
+
+  return (
+    <DrawerLayoutAndroid
+      ref={drawerRef}
+      drawerWidth={300}
+      renderNavigationView={renderDrawerContent}>
+      <View style={styles.container}>
+        <View style={styles.form_container}>
+          <TextInput
+            placeholder="Search for the content"
+            style={styles.search_container}
+            value={searchTerm}
+            onChangeText={setSearchTerm}
+          />
+          <Pressable
+            style={styles.filter}
+            onPress={() => drawerRef.current?.openDrawer()}>
+            <Image
+              source={require('./assets/filter.png')}
+              style={{width: 20, height: 20}}
+            />
+            <Text style={styles.icons}>Filter</Text>
+          </Pressable>
+        </View>
+        <List filter={filter} />
+      </View>
+    </DrawerLayoutAndroid>
+  );
+};
+
+export default Home;
+
+const styles = StyleSheet.create({
+  container: {
+    margin: 10,
+  },
+  form_container: {
+    padding: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  search_container: {
+    width: '75%',
+    height: 45,
+    padding: 10,
+    borderWidth: 3,
+    borderRadius: 30,
+    borderColor: '#f1f1f1',
+    fontSize: 17,
+    backgroundColor: '#ffffff',
+    elevation: 20,
+  },
+  filter: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingLeft: 10,
+  },
+  icons: {
+    fontSize: 18,
+  },
+  drawerContainer: {
+    flex: 1,
+    backgroundColor: '#ffffff',
+    padding: 20,
+  },
+  drawerHeader: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  drawerMessage: {
+    fontSize: 16,
+    color: '#666',
+  },
+  input: {
+    width: '50%',
+    height: 45,
+    borderWidth: 2,
+    padding: 10,
+    paddingLeft: 15,
+    borderRadius: 20,
+    borderColor: 'lightblue',
+    fontSize: 16,
+    marginBottom: 10,
+  },
+  heading: {
+    fontSize: 18,
+    fontWeight: '700',
+  },
+  filters_container: {
+    backgroundColor: '#f1f1f1',
+    padding: 10,
+    borderRadius: 20,
+    elevation: 10,
+  },
+  date_container: {
+    padding: 5,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  toogle:{
+    flexDirection:'column',
+    flexWrap:'wrap'
+    }
+});
