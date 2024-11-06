@@ -113,7 +113,7 @@ const Home = () => {
                 <Text style={styles.heading}>Task Status:-</Text>
                 <MultiSelect
                   items={data}
-                  uniqueKey="id"
+                  uniqueKey="value"
                   selectedItems={select_status}
                   onSelectedItemsChange={setSelect_Status} 
                   selectText="Pick Items"
