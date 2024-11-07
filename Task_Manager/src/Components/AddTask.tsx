@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { StyleSheet, Text, TextInput, View, Button } from 'react-native';
+import { StyleSheet, Text, TextInput, View, Button ,Alert  } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import useTasks from '../coustom_hooks/TaskManagementHooks';
 import { Dropdown } from 'react-native-element-dropdown';
@@ -55,6 +55,7 @@ const AddTask: React.FC = () => {
       setDescription('');
       setDueDate(new Date());
       setStatus('');
+      Alert.alert('The task was successfully Added')
       navigation.goBack();
     } else {
       console.log(validationErrors);

@@ -1,4 +1,4 @@
-import { TextInput, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
+import { TextInput, Modal, Pressable, StyleSheet, Text, View, Alert } from 'react-native';
 import { useState } from 'react';
 import { Dropdown } from 'react-native-element-dropdown';
 import DatePicker from 'react-native-date-picker';
@@ -31,6 +31,7 @@ const Edit = ({ task }: { task: Task }) => {
 
   const handleDeleteTask = () => {
     deleteTask(task.id);
+    Alert.alert('The task was successfully deleted')
     setModalVisible(false);
     console.log('deleted')
     navigation.goBack();
@@ -46,6 +47,7 @@ const Edit = ({ task }: { task: Task }) => {
     };
     editTask(task.id, updatedTask);
     console.log('updated')
+    Alert.alert('The task was successfully updated')
     setModalVisible(false);
     navigation.goBack();
   };
