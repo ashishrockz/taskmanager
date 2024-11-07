@@ -12,6 +12,9 @@ import React, {useState, useEffect, useRef} from 'react';
 import List from './Components/List';
 import DatePicker from 'react-native-date-picker';
 import MultiSelect from 'react-native-multiple-select';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import { faFilter } from '@fortawesome/free-solid-svg-icons/faFilter';
+import { faMugSaucer } from '@fortawesome/free-solid-svg-icons';
 const data = [
   {id: 1, label: 'To Do', value: 'To Do'},
   {id: 2, label: 'In Progress', value: 'In Progress'},
@@ -51,10 +54,11 @@ const Home = () => {
           onChangeText={setSearchTerm}
         />
         <Pressable style={styles.filter} onPress={() => setModalVisible(true)}>
-          <Image
+          {/* <Image
             source={require('./assets/filter.png')}
             style={{width: 20, height: 20}}
-          />
+          /> */}
+          <FontAwesomeIcon icon={faFilter} />
           <Text style={styles.icons}>Filter</Text>
         </Pressable>
       </View>
